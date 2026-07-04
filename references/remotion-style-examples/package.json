@@ -1,0 +1,22 @@
+{
+  "name": "remotion-style-examples",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio",
+    "start": "remotion studio",
+    "compositions": "remotion compositions src/index.ts",
+    "still": "remotion still OverlayDemo out/overlay-demo-frame.png --frame=120"
+  },
+  "dependencies": {
+    "@remotion/cli": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "remotion": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "typescript": "latest"
+  }
+}
