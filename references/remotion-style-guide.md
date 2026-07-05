@@ -6,6 +6,7 @@
 - Five Reference Cases / 五个参考案例
 - Choosing a Style / 选择风格
 - Timing From Transcript / 基于字幕卡点
+- Keyword Effects / 关键词动效
 - Placement Rules / 摆放规则
 - Remotion + React + GSAP
 - Adaptation Rules / 改造规则
@@ -197,6 +198,24 @@ Rules:
 3. 可读卡片尽量至少停留 72 帧。
 4. 最终状态至少保留 24 帧。
 5. 同一时间只引入一个新的视觉重点。
+
+## Keyword Effects / 关键词动效
+
+Read `references/keyword-animation-effects.md` when selecting concrete keyword animations. The chosen Remotion style controls geometry, typography, borders, color discipline, and motion character; the keyword-effect library controls the local emphasis type and optional `effectId`.
+
+选择具体关键词动效时读取 `references/keyword-animation-effects.md`。已选 Remotion 风格决定几何、字号、描边、色彩克制和动效性格；关键词动效库决定局部强调类型和可选 `effectId`。
+
+Rules:
+
+规则：
+
+1. Keep keyword effects consistent with the selected style; for the default `dark-diagnostic-hud`, prefer restrained modular cards, kinetic type cards, mouse-click callouts, short terminal tags, comparison swaps, and orbit-flow connectors.
+2. Use keyword effects on a few payoff words only, not as continuous subtitle animation.
+3. Keep effects local to overlays and matched assets. Do not change the user's video layer or add background treatment unless the user explicitly asks.
+
+1. 关键词动效必须贴合已选风格；默认 `dark-diagnostic-hud` 优先使用克制的模块卡片、动态关键词卡、鼠标点击标注、短终端标签、前后替换卡和环绕连线。
+2. 关键词动效只用于少数重点词，不要把整条字幕连续动画化。
+3. 动效只作用于 overlay 和匹配素材。除非用户明确要求，不要改动用户视频层或添加背景处理。
 
 ## Placement Rules / 摆放规则
 

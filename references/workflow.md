@@ -7,6 +7,7 @@
 - Normalize / 归一化
 - Normalized JSON / 归一化 JSON
 - Remotion Style / Remotion 风格
+- Keyword Animation Effects / 关键词动效库
 - Asset Manifest / 素材清单
 - Packaging Plan / 包装方案
 - Implementation Prompt / 实现 Prompt
@@ -144,6 +145,32 @@ Do not draft the packaging plan until the style is known.
 
 风格未确定前，不要生成包装方案。
 
+## Keyword Animation Effects / 关键词动效库
+
+Before asking `$video-use` to draft the packaging plan, read `references/keyword-animation-effects.md`.
+
+让 `$video-use` 生成包装方案前，读取 `references/keyword-animation-effects.md`。
+
+Use this file as the default effect-choice library for spoken payoff words, short keyword cards, and local interaction beats. It is not a mandate to animate every keyword.
+
+把这个文件作为口播重点词、短关键词卡片和局部交互节点的默认动效选择库。它不是“每个关键词都必须动”的强制规则。
+
+Effect selection rules:
+
+动效选择规则：
+
+1. Choose effects from the library by subtitle semantics, selected Remotion style, and safe placement.
+2. Prefer the `effectId` specs in the library when a Remotion-native effect fits.
+3. Bind each effect to `normalized.words` payoff timing; use `normalized.segments` only for readable card lifetimes.
+4. Keep effects local to cards, keywords, connectors, or matched assets. Do not add global progress bars, background treatments, scan grids, dark scrims, backdrop images, or video filters by default.
+5. If a line/path/arrow/connector effect is used, include the moving glow point rule from the library in the plan and implementation prompt.
+
+1. 按字幕语义、已选 Remotion 风格和安全摆放位置，从库里选择动效。
+2. 如果 Remotion 原生效果适配，优先使用库中的 `effectId` 规范。
+3. 每个动效绑定到 `normalized.words` 的重点词时间；`normalized.segments` 只用于可读卡片生命周期。
+4. 动效只作用于卡片、关键词、连线或匹配素材。默认不要添加全局进度条、背景处理、扫描网格、压暗蒙层、背景图或视频滤镜。
+5. 如果使用线条、路径、箭头或连线类动效，包装方案和实现 prompt 必须包含库里的移动发光点规则。
+
 ## Asset Manifest / 素材清单
 
 Before asking `$video-use` to draft the packaging plan, build the project asset manifest:
@@ -173,6 +200,7 @@ After the style is confirmed and `asset-manifest.json` exists, use upstream `$vi
 - `normalized.edl`
 - `asset-manifest.json`
 - selected style, defaulting to `DarkDiagnosticHUDTest` / `dark-diagnostic-hud`
+- selected keyword effects from `references/keyword-animation-effects.md`
 - on-demand visual checks from the video for face, mouth, subtitle safe zone, and gestures
 
 - `normalized.videoPath`
@@ -181,6 +209,7 @@ After the style is confirmed and `asset-manifest.json` exists, use upstream `$vi
 - `normalized.edl`
 - `asset-manifest.json`
 - 已选风格，默认 `DarkDiagnosticHUDTest` / `dark-diagnostic-hud`
+- 来自 `references/keyword-animation-effects.md` 的已选关键词动效
 - 针对脸、嘴、字幕安全区和手势的按需画面检查
 
 The `$video-use` output must be a plain packaging plan, not implementation code. It must include:
@@ -190,6 +219,7 @@ The `$video-use` output must be a plain packaging plan, not implementation code.
 - chosen style and why it fits
 - key beats with start/end times
 - card/keyword/image moments tied to `normalized.words` or `normalized.segments`
+- chosen keyword effect name or `effectId`, with entry/hold/emphasis/exit behavior
 - matched asset usage or reason for skipping each relevant match
 - placement plan with safe-zone reasoning
 - gesture-aware placements when pointing, dragging, or underlining is visible
@@ -198,6 +228,7 @@ The `$video-use` output must be a plain packaging plan, not implementation code.
 - 已选风格和选择理由
 - 带 start/end 时间的关键节奏点
 - 绑定到 `normalized.words` 或 `normalized.segments` 的卡片、关键词、图片节点
+- 选择的关键词动效名称或 `effectId`，并说明入场、停留、强调和退场行为
 - 匹配素材的使用方式，或跳过相关匹配的理由
 - 带安全区理由的摆放方案
 - 当画面中出现指、拖、划线等手势时的手势感知摆放
@@ -232,6 +263,7 @@ The implementation prompt must specify:
 - target Remotion project path
 - composition id, duration, fps, width, and height
 - selected style reference file(s) under `references/remotion-style-examples/`
+- selected keyword-effect library entries and `effectId` values from `references/keyword-animation-effects.md`
 - data inputs: `normalized.json`, `asset-manifest.json`, video path, subtitle source
 - timeline events with frame ranges
 - placement rectangles or placement presets
@@ -243,6 +275,7 @@ The implementation prompt must specify:
 - 目标 Remotion 工程路径
 - composition id、时长、fps、宽高
 - `references/remotion-style-examples/` 下的已选风格参考文件
+- `references/keyword-animation-effects.md` 中已选关键词动效条目和 `effectId`
 - 数据输入：`normalized.json`、`asset-manifest.json`、视频路径、字幕来源
 - 带 frame 范围的时间线事件
 - 摆放矩形或摆放预设
@@ -291,9 +324,10 @@ Then build the user project:
 8. Keep the video layer visually unchanged by default: no global progress bar, background treatment, scan grid, dark scrim, backdrop image, video filter, or brightness/saturation/contrast change unless the user explicitly requests it.
 9. Set composition duration from `normalized.duration`.
 10. Use `normalized.words` for word-accurate payoff timing and `normalized.segments` for readable popup cards.
-11. Use matched assets at their matching keyword cue only when they do not block the face, mouth, subtitles, or approved style.
-12. Extract QA keyframes and fix issues before Studio preview.
-13. Start Studio with `npm run studio`; do not render final video by default.
+11. Implement selected keyword effects from `references/keyword-animation-effects.md` only where the confirmed prompt calls for them.
+12. Use matched assets at their matching keyword cue only when they do not block the face, mouth, subtitles, or approved style.
+13. Extract QA keyframes and fix issues before Studio preview.
+14. Start Studio with `npm run studio`; do not render final video by default.
 
 1. 新建一个干净的 Remotion 工程，或改造用户明确提供的已有 Remotion 工程。
 2. 把 `normalized.json` 加成本地数据文件或可 import 的 JSON。
@@ -305,9 +339,10 @@ Then build the user project:
 8. 默认保持视频层视觉不变：除非用户明确要求，不添加全局进度条、背景处理、扫描网格、压暗蒙层、背景图、视频滤镜或亮度/饱和度/对比度变化。
 9. 根据 `normalized.duration` 设置 composition 时长。
 10. 用 `normalized.words` 做词级卡点，用 `normalized.segments` 做可读弹出卡片。
-11. 只在不挡脸、不挡嘴、不挡字幕且不破坏已确认风格时，在匹配关键词 cue 使用匹配素材。
-12. 抽取 QA 关键帧并修复问题后再打开 Studio。
-13. 用 `npm run studio` 启动 Studio；默认不要渲染最终视频。
+11. 只实现已确认 prompt 中调用的 `references/keyword-animation-effects.md` 关键词动效。
+12. 只在不挡脸、不挡嘴、不挡字幕且不破坏已确认风格时，在匹配关键词 cue 使用匹配素材。
+13. 抽取 QA 关键帧并修复问题后再打开 Studio。
+14. 用 `npm run studio` 启动 Studio；默认不要渲染最终视频。
 
 ## Pre-Studio Keyframe QA / Studio 前关键帧 QA
 
@@ -318,6 +353,7 @@ Before opening Remotion Studio, extract still frames from the generated composit
 - first frame and last frame
 - every overlay/card/image start frame
 - every overlay/card/image landing frame
+- every keyword effect trigger frame and visual payoff frame
 - a mid-hold frame for every readable card
 - every exit frame when an element leaves
 - gesture cue frames when gesture-aware placement is used
@@ -325,6 +361,7 @@ Before opening Remotion Studio, extract still frames from the generated composit
 - 第一帧和最后一帧
 - 每个 overlay/卡片/图片的开始帧
 - 每个 overlay/卡片/图片的落位帧
+- 每个关键词动效的触发帧和视觉落点帧
 - 每个可读卡片的中段停留帧
 - 每个元素离场帧
 - 使用手势感知摆放时的手势 cue 帧
@@ -340,6 +377,7 @@ Inspect the frames before opening Studio:
 - no blank frame
 - no off-canvas or misplaced element
 - matched assets appear only at intended keyword cues
+- keyword effects appear only at confirmed payoff words and do not animate unrelated words
 - gesture-aware elements sit near the intended gesture target without violating safe zones
 
 - 不遮脸
@@ -349,6 +387,7 @@ Inspect the frames before opening Studio:
 - 没有空白帧
 - 没有元素出画或错位
 - 匹配素材只在预期关键词 cue 出现
+- 关键词动效只在已确认的重点词出现，不要带动无关词
 - 手势感知元素靠近预期手势目标，且不违反安全区
 
 If any check fails, fix the Remotion code, extract keyframes again, and repeat. Cap at three QA passes; if issues remain, report the exact residual problems before showing Studio.

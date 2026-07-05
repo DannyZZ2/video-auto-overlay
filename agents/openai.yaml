@@ -1,4 +1,4 @@
 interface:
   display_name: "Video Auto Overlay"
-  short_description: "video-use 包装方案到暗色 HUD Remotion 动效工作流"
-  default_prompt: "Use $video-auto-overlay to turn a prepared or raw video into word-timed Remotion overlay animations: draft a video-use packaging plan, confirm the Remotion/React/GSAP prompt with the user, default to dark-diagnostic-hud, treat bundled examples as read-only style references, and run pre-Studio keyframe QA."
+  short_description: "video-use 到关键词动效 Remotion 包装流程"
+  default_prompt: "Use $video-auto-overlay to turn a prepared or raw video into word-timed Remotion overlay animations: draft a video-use packaging plan with the keyword-animation-effects library, confirm the Remotion/React/GSAP prompt with the user, default to dark-diagnostic-hud, treat bundled examples as read-only style references, and run pre-Studio keyframe QA."
