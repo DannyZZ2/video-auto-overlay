@@ -3,6 +3,7 @@
 ## Contents / 目录
 
 - Source / 来源
+- Style Snapshots / 风格样张
 - Five Reference Cases / 五个参考案例
 - Choosing a Style / 选择风格
 - Timing From Transcript / 基于字幕卡点
@@ -17,6 +18,25 @@
 Use the bundled reference project at `references/remotion-style-examples/` as the visual source of truth. It contains five working Remotion compositions for style inspection only.
 
 使用 `references/remotion-style-examples/` 作为视觉事实来源。里面包含 5 个可运行 Remotion composition，但只用于风格参考。
+
+Use still snapshots at `references/style-snapshots/` for quick visual inspection before drafting packaging plans or implementation prompts.
+
+生成包装方案或实现 prompt 前，使用 `references/style-snapshots/` 里的静态样张快速检查视觉风格。
+
+## Style Snapshots / 风格样张
+
+These images are rendered from the reference Remotion project and are read-only visual anchors. Do not copy them into generated user projects.
+
+这些图片从参考 Remotion 工程渲染得到，是只读视觉锚点。不要复制进用户生成项目。
+
+| Composition / 组合 | Snapshot / 样张 | Use / 用途 |
+|---|---|---|
+| `OverlayDemo` | `references/style-snapshots/overlay-demo.png` | Standard light popup overlays / 标准浅色弹窗 |
+| `PrecisionHUD` | `references/style-snapshots/precision-hud.png` | Structured metrics and process HUD / 结构化指标和流程 HUD |
+| `FrostedGlass` | `references/style-snapshots/frosted-glass.png` | Softer translucent explanatory overlays / 柔和半透明解释卡 |
+| `TerminalAgent` | `references/style-snapshots/terminal-agent.png` | Terminal, prompt, command, and agent execution overlays / 终端、prompt、命令和 Agent 执行卡 |
+| `DarkDiagnosticHUDTest` | `references/style-snapshots/dark-diagnostic-hud.png` | Default dark diagnostic HUD / 默认暗色诊断 HUD |
+| All styles / 全部风格 | `references/style-snapshots/contact-sheet.png` | Fast comparison across all five styles / 快速对比 5 个风格 |
 
 ## Five Reference Cases / 五个参考案例
 
@@ -33,6 +53,7 @@ Source files:
 ```text
 src/video-overlay-kit/examples/OverlayDemoComposition.tsx
 src/video-overlay-kit/components/
+references/style-snapshots/overlay-demo.png
 ```
 
 Design behavior:
@@ -61,6 +82,7 @@ Source file:
 
 ```text
 src/video-overlay-kit/examples/StyleVariantCompositions.tsx
+references/style-snapshots/precision-hud.png
 ```
 
 Design behavior:
@@ -87,6 +109,7 @@ Source file:
 
 ```text
 src/video-overlay-kit/examples/StyleVariantCompositions.tsx
+references/style-snapshots/frosted-glass.png
 ```
 
 Design behavior:
@@ -113,6 +136,7 @@ Source file:
 
 ```text
 src/video-overlay-kit/examples/StyleVariantCompositions.tsx
+references/style-snapshots/terminal-agent.png
 ```
 
 Design behavior:
@@ -140,6 +164,7 @@ Source file:
 ```text
 src/video-overlay-kit/examples/DarkDiagnosticHUDTest.tsx
 public/assets/traffic-compass-bg.jpg
+references/style-snapshots/dark-diagnostic-hud.png
 ```
 
 Design behavior:
@@ -156,9 +181,9 @@ Design behavior:
 
 ## Choosing a Style / 选择风格
 
-Default to `DarkDiagnosticHUDTest` (`dark-diagnostic-hud`) for generated packaging unless the user explicitly asks for another style. Use the other styles only when the user chooses them or the requested tone clearly conflicts with the default.
+Default to `DarkDiagnosticHUDTest` (`dark-diagnostic-hud`) for generated packaging unless the user explicitly asks for another style. Inspect `references/style-snapshots/dark-diagnostic-hud.png` before drafting the packaging plan. Use the other styles only when the user chooses them or the requested tone clearly conflicts with the default.
 
-生成包装动效时，除非用户明确要求其他风格，否则默认使用 `DarkDiagnosticHUDTest`（`dark-diagnostic-hud`）。只有在用户指定，或用户要求的调性明显不适合默认风格时，才切换到其他风格。
+生成包装动效时，除非用户明确要求其他风格，否则默认使用 `DarkDiagnosticHUDTest`（`dark-diagnostic-hud`）。生成包装方案前先查看 `references/style-snapshots/dark-diagnostic-hud.png`。只有在用户指定，或用户要求的调性明显不适合默认风格时，才切换到其他风格。
 
 When an alternate style is needed, prefer the smallest style that communicates the point:
 

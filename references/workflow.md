@@ -7,6 +7,7 @@
 - Normalize / 归一化
 - Normalized JSON / 归一化 JSON
 - Remotion Style / Remotion 风格
+- Style Snapshots / 风格样张
 - Diagnostic HUD Packaging Patterns / 诊断 HUD 包装模式
 - Keyword Animation Effects / 关键词动效库
 - Asset Manifest / 素材清单
@@ -146,6 +147,29 @@ Do not draft the packaging plan until the style is known.
 
 风格未确定前，不要生成包装方案。
 
+## Style Snapshots / 风格样张
+
+Before confirming or adapting a visual style, inspect the matching still snapshot under `references/style-snapshots/`.
+
+确认或改造视觉风格前，查看 `references/style-snapshots/` 下对应的静态样张。
+
+Snapshot map:
+
+样张映射：
+
+| style | snapshot |
+|---|---|
+| `OverlayDemo` | `references/style-snapshots/overlay-demo.png` |
+| `PrecisionHUD` | `references/style-snapshots/precision-hud.png` |
+| `FrostedGlass` | `references/style-snapshots/frosted-glass.png` |
+| `TerminalAgent` | `references/style-snapshots/terminal-agent.png` |
+| `DarkDiagnosticHUDTest` / `dark-diagnostic-hud` | `references/style-snapshots/dark-diagnostic-hud.png` |
+| all styles overview / 全部风格总览 | `references/style-snapshots/contact-sheet.png` |
+
+Use snapshots to anchor geometry, density, typography scale, color discipline, and motion character. They are read-only references and must not be copied into the generated user Remotion project.
+
+样张用于锚定几何、密度、字号层级、色彩克制和动效性格。它们是只读参考，不要复制进用户生成的 Remotion 工程。
+
 ## Diagnostic HUD Packaging Patterns / 诊断 HUD 包装模式
 
 Before asking `$video-use` to draft the packaging plan, read `references/diagnostic-hud-packaging-patterns.md`.
@@ -227,6 +251,7 @@ After the style is confirmed and `asset-manifest.json` exists, use upstream `$vi
 - `normalized.edl`
 - `asset-manifest.json`
 - selected style, defaulting to `DarkDiagnosticHUDTest` / `dark-diagnostic-hud`
+- selected style snapshot from `references/style-snapshots/`
 - selected packaging patterns from `references/diagnostic-hud-packaging-patterns.md`
 - selected keyword effects from `references/keyword-animation-effects.md`
 - on-demand visual checks from the video for face, mouth, subtitle safe zone, and gestures
@@ -237,6 +262,7 @@ After the style is confirmed and `asset-manifest.json` exists, use upstream `$vi
 - `normalized.edl`
 - `asset-manifest.json`
 - 已选风格，默认 `DarkDiagnosticHUDTest` / `dark-diagnostic-hud`
+- 来自 `references/style-snapshots/` 的已选风格样张
 - 来自 `references/diagnostic-hud-packaging-patterns.md` 的已选包装模式
 - 来自 `references/keyword-animation-effects.md` 的已选关键词动效
 - 针对脸、嘴、字幕安全区和手势的按需画面检查
@@ -246,6 +272,7 @@ The `$video-use` output must be a plain packaging plan, not implementation code.
 `$video-use` 的输出必须是普通包装方案，不是实现代码。方案必须包含：
 
 - chosen style and why it fits
+- chosen style snapshot path and visual traits to preserve
 - key beats with start/end times
 - chosen `patternType`, text hierarchy, and evidence source for every packaging beat
 - card/keyword/image moments tied to `normalized.words` or `normalized.segments`
@@ -256,6 +283,7 @@ The `$video-use` output must be a plain packaging plan, not implementation code.
 - keyframes that must be checked before Studio preview
 
 - 已选风格和选择理由
+- 已选风格样张路径，以及需要保留的视觉特征
 - 带 start/end 时间的关键节奏点
 - 每个包装节点选择的 `patternType`、文字层级和证据来源
 - 绑定到 `normalized.words` 或 `normalized.segments` 的卡片、关键词、图片节点
@@ -294,6 +322,7 @@ The implementation prompt must specify:
 - target Remotion project path
 - composition id, duration, fps, width, and height
 - selected style reference file(s) under `references/remotion-style-examples/`
+- selected style snapshot path under `references/style-snapshots/`
 - selected packaging pattern entries and `patternType` values from `references/diagnostic-hud-packaging-patterns.md`
 - selected keyword-effect library entries and `effectId` values from `references/keyword-animation-effects.md`
 - data inputs: `normalized.json`, `asset-manifest.json`, video path, subtitle source
@@ -307,6 +336,7 @@ The implementation prompt must specify:
 - 目标 Remotion 工程路径
 - composition id、时长、fps、宽高
 - `references/remotion-style-examples/` 下的已选风格参考文件
+- `references/style-snapshots/` 下的已选风格样张路径
 - `references/diagnostic-hud-packaging-patterns.md` 中已选包装模式条目和 `patternType`
 - `references/keyword-animation-effects.md` 中已选关键词动效条目和 `effectId`
 - 数据输入：`normalized.json`、`asset-manifest.json`、视频路径、字幕来源
@@ -352,32 +382,34 @@ Then build the user project:
 3. Add `asset-manifest.json` as a local data file or importable JSON.
 4. Add a new composition for the user's video from the confirmed implementation prompt.
 5. Use `DarkDiagnosticHUDTest` (`dark-diagnostic-hud`) as the default style, unless another style was explicitly selected.
-6. Recreate only the needed visual language from the selected reference example; do not wholesale-copy the reference project.
+6. Recreate only the needed visual language from the selected reference example and matching snapshot; do not wholesale-copy the reference project.
 7. Do not register, expose, or copy the five reference compositions into the user's project. The generated project should include only user-facing composition(s).
-8. Keep the video layer visually unchanged by default: no global progress bar, background treatment, scan grid, dark scrim, backdrop image, video filter, or brightness/saturation/contrast change unless the user explicitly requests it.
-9. Set composition duration from `normalized.duration`.
-10. Use `normalized.words` for word-accurate payoff timing and `normalized.segments` for readable popup cards.
-11. Implement selected packaging patterns from `references/diagnostic-hud-packaging-patterns.md` only where the confirmed prompt calls for them.
-12. Implement selected keyword effects from `references/keyword-animation-effects.md` only where the confirmed prompt calls for them.
-13. Use matched assets at their matching keyword cue only when they do not block the face, mouth, subtitles, or approved style.
-14. Extract QA keyframes and fix issues before Studio preview.
-15. Start Studio with `npm run studio`; do not render final video by default.
+8. Do not copy `references/style-snapshots/` into the user's project.
+9. Keep the video layer visually unchanged by default: no global progress bar, background treatment, scan grid, dark scrim, backdrop image, video filter, or brightness/saturation/contrast change unless the user explicitly requests it.
+10. Set composition duration from `normalized.duration`.
+11. Use `normalized.words` for word-accurate payoff timing and `normalized.segments` for readable popup cards.
+12. Implement selected packaging patterns from `references/diagnostic-hud-packaging-patterns.md` only where the confirmed prompt calls for them.
+13. Implement selected keyword effects from `references/keyword-animation-effects.md` only where the confirmed prompt calls for them.
+14. Use matched assets at their matching keyword cue only when they do not block the face, mouth, subtitles, or approved style.
+15. Extract QA keyframes and fix issues before Studio preview.
+16. Start Studio with `npm run studio`; do not render final video by default.
 
 1. 新建一个干净的 Remotion 工程，或改造用户明确提供的已有 Remotion 工程。
 2. 把 `normalized.json` 加成本地数据文件或可 import 的 JSON。
 3. 把 `asset-manifest.json` 加成本地数据文件或可 import 的 JSON。
 4. 根据用户已确认的实现 prompt 新增用户视频 composition。
 5. 除非已明确选择其他风格，否则默认用 `DarkDiagnosticHUDTest`（`dark-diagnostic-hud`）作为风格。
-6. 只复刻已选参考案例中必要的视觉语言；不要整包复制参考工程。
+6. 只复刻已选参考案例和对应样张中必要的视觉语言；不要整包复制参考工程。
 7. 不要把 5 个参考 composition 注册、暴露或复制进用户项目。生成项目里只包含用户要看的 composition。
-8. 默认保持视频层视觉不变：除非用户明确要求，不添加全局进度条、背景处理、扫描网格、压暗蒙层、背景图、视频滤镜或亮度/饱和度/对比度变化。
-9. 根据 `normalized.duration` 设置 composition 时长。
-10. 用 `normalized.words` 做词级卡点，用 `normalized.segments` 做可读弹出卡片。
-11. 只实现已确认 prompt 中调用的 `references/diagnostic-hud-packaging-patterns.md` 包装模式。
-12. 只实现已确认 prompt 中调用的 `references/keyword-animation-effects.md` 关键词动效。
-13. 只在不挡脸、不挡嘴、不挡字幕且不破坏已确认风格时，在匹配关键词 cue 使用匹配素材。
-14. 抽取 QA 关键帧并修复问题后再打开 Studio。
-15. 用 `npm run studio` 启动 Studio；默认不要渲染最终视频。
+8. 不要把 `references/style-snapshots/` 复制进用户项目。
+9. 默认保持视频层视觉不变：除非用户明确要求，不添加全局进度条、背景处理、扫描网格、压暗蒙层、背景图、视频滤镜或亮度/饱和度/对比度变化。
+10. 根据 `normalized.duration` 设置 composition 时长。
+11. 用 `normalized.words` 做词级卡点，用 `normalized.segments` 做可读弹出卡片。
+12. 只实现已确认 prompt 中调用的 `references/diagnostic-hud-packaging-patterns.md` 包装模式。
+13. 只实现已确认 prompt 中调用的 `references/keyword-animation-effects.md` 关键词动效。
+14. 只在不挡脸、不挡嘴、不挡字幕且不破坏已确认风格时，在匹配关键词 cue 使用匹配素材。
+15. 抽取 QA 关键帧并修复问题后再打开 Studio。
+16. 用 `npm run studio` 启动 Studio；默认不要渲染最终视频。
 
 ## Pre-Studio Keyframe QA / Studio 前关键帧 QA
 
