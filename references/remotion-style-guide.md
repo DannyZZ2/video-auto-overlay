@@ -6,6 +6,7 @@
 - Five Reference Cases / 五个参考案例
 - Choosing a Style / 选择风格
 - Timing From Transcript / 基于字幕卡点
+- Diagnostic HUD Patterns / 诊断 HUD 模式
 - Keyword Effects / 关键词动效
 - Placement Rules / 摆放规则
 - Remotion + React + GSAP
@@ -198,6 +199,26 @@ Rules:
 3. 可读卡片尽量至少停留 72 帧。
 4. 最终状态至少保留 24 帧。
 5. 同一时间只引入一个新的视觉重点。
+
+## Diagnostic HUD Patterns / 诊断 HUD 模式
+
+Read `references/diagnostic-hud-packaging-patterns.md` when the selected style is `DarkDiagnosticHUDTest` / `dark-diagnostic-hud`. The style reference controls the look; the diagnostic pattern library controls what card type to generate and what fields the plan must contain.
+
+当已选风格是 `DarkDiagnosticHUDTest` / `dark-diagnostic-hud` 时，读取 `references/diagnostic-hud-packaging-patterns.md`。风格参考决定外观；诊断模式库决定生成什么卡片类型，以及方案必须包含哪些字段。
+
+Rules:
+
+规则：
+
+1. Prefer evidence-and-diagnosis patterns over generic subtitle emphasis.
+2. Use `sectionHeader`, `diagnosticChecklist`, `evidenceCard`, `stateComparison`, `workflowChain`, `identitySourceCard`, `repoCommandCard`, and `verdictChip` as the default pattern vocabulary.
+3. Do not fabricate evidence. If there is no real screenshot, document, repo, chat, video frame, or matched asset, use a generated diagnostic summary card.
+4. Keep all diagnostic styling local to overlays. Do not recreate the reference video's background treatment unless the user explicitly requests it.
+
+1. 优先使用“证据 + 诊断”模式，而不是泛泛的字幕强调。
+2. 默认模式词汇使用 `sectionHeader`、`diagnosticChecklist`、`evidenceCard`、`stateComparison`、`workflowChain`、`identitySourceCard`、`repoCommandCard` 和 `verdictChip`。
+3. 不要伪造证据。如果没有真实截图、文档、仓库、聊天记录、视频帧或匹配素材，使用生成诊断摘要卡。
+4. 诊断风格只作用于局部 overlay。除非用户明确要求，不复刻参考视频里的背景处理。
 
 ## Keyword Effects / 关键词动效
 

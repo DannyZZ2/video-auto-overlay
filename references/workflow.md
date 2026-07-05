@@ -7,6 +7,7 @@
 - Normalize / 归一化
 - Normalized JSON / 归一化 JSON
 - Remotion Style / Remotion 风格
+- Diagnostic HUD Packaging Patterns / 诊断 HUD 包装模式
 - Keyword Animation Effects / 关键词动效库
 - Asset Manifest / 素材清单
 - Packaging Plan / 包装方案
@@ -145,6 +146,32 @@ Do not draft the packaging plan until the style is known.
 
 风格未确定前，不要生成包装方案。
 
+## Diagnostic HUD Packaging Patterns / 诊断 HUD 包装模式
+
+Before asking `$video-use` to draft the packaging plan, read `references/diagnostic-hud-packaging-patterns.md`.
+
+让 `$video-use` 生成包装方案前，读取 `references/diagnostic-hud-packaging-patterns.md`。
+
+Use this file as the default card/text/evidence generation library for `DarkDiagnosticHUDTest` / `dark-diagnostic-hud`.
+
+把这个文件作为 `DarkDiagnosticHUDTest` / `dark-diagnostic-hud` 的默认卡片、文字和证据生成库。
+
+Pattern rules:
+
+模式规则：
+
+1. Build packaging as evidence-and-diagnosis overlays, not animated subtitles.
+2. Choose a `patternType` for each packaging beat: `sectionHeader`, `diagnosticChecklist`, `evidenceCard`, `stateComparison`, `workflowChain`, `identitySourceCard`, `repoCommandCard`, or `verdictChip`.
+3. Generate short packaging text using the hierarchy: `sectionLabel`, `mainText`, `supportText`, `evidenceHighlight`, normal bottom subtitle.
+4. Use `evidenceCard` only when a real source exists: provided asset, matched project asset, real video frame, or user-provided screenshot/document. If no evidence source exists, use `generated-diagnostic-card` and label it as a generated summary, not proof.
+5. Do not fabricate screenshots, chat messages, repository names, filenames, scores, or source evidence.
+
+1. 把包装做成“证据 + 诊断” overlay，不要做成字幕动画。
+2. 每个包装节点选择一个 `patternType`：`sectionHeader`、`diagnosticChecklist`、`evidenceCard`、`stateComparison`、`workflowChain`、`identitySourceCard`、`repoCommandCard` 或 `verdictChip`。
+3. 按 `sectionLabel`、`mainText`、`supportText`、`evidenceHighlight`、底部普通字幕的层级生成短包装文字。
+4. 只有存在真实来源时才使用 `evidenceCard`：用户提供素材、匹配到的项目素材、真实视频帧，或用户提供的截图/文档。没有证据来源时，使用 `generated-diagnostic-card`，并标成生成摘要，不要伪装成证据。
+5. 不要伪造截图、聊天记录、仓库名、文件名、分数或来源证据。
+
 ## Keyword Animation Effects / 关键词动效库
 
 Before asking `$video-use` to draft the packaging plan, read `references/keyword-animation-effects.md`.
@@ -200,6 +227,7 @@ After the style is confirmed and `asset-manifest.json` exists, use upstream `$vi
 - `normalized.edl`
 - `asset-manifest.json`
 - selected style, defaulting to `DarkDiagnosticHUDTest` / `dark-diagnostic-hud`
+- selected packaging patterns from `references/diagnostic-hud-packaging-patterns.md`
 - selected keyword effects from `references/keyword-animation-effects.md`
 - on-demand visual checks from the video for face, mouth, subtitle safe zone, and gestures
 
@@ -209,6 +237,7 @@ After the style is confirmed and `asset-manifest.json` exists, use upstream `$vi
 - `normalized.edl`
 - `asset-manifest.json`
 - 已选风格，默认 `DarkDiagnosticHUDTest` / `dark-diagnostic-hud`
+- 来自 `references/diagnostic-hud-packaging-patterns.md` 的已选包装模式
 - 来自 `references/keyword-animation-effects.md` 的已选关键词动效
 - 针对脸、嘴、字幕安全区和手势的按需画面检查
 
@@ -218,6 +247,7 @@ The `$video-use` output must be a plain packaging plan, not implementation code.
 
 - chosen style and why it fits
 - key beats with start/end times
+- chosen `patternType`, text hierarchy, and evidence source for every packaging beat
 - card/keyword/image moments tied to `normalized.words` or `normalized.segments`
 - chosen keyword effect name or `effectId`, with entry/hold/emphasis/exit behavior
 - matched asset usage or reason for skipping each relevant match
@@ -227,6 +257,7 @@ The `$video-use` output must be a plain packaging plan, not implementation code.
 
 - 已选风格和选择理由
 - 带 start/end 时间的关键节奏点
+- 每个包装节点选择的 `patternType`、文字层级和证据来源
 - 绑定到 `normalized.words` 或 `normalized.segments` 的卡片、关键词、图片节点
 - 选择的关键词动效名称或 `effectId`，并说明入场、停留、强调和退场行为
 - 匹配素材的使用方式，或跳过相关匹配的理由
@@ -263,6 +294,7 @@ The implementation prompt must specify:
 - target Remotion project path
 - composition id, duration, fps, width, and height
 - selected style reference file(s) under `references/remotion-style-examples/`
+- selected packaging pattern entries and `patternType` values from `references/diagnostic-hud-packaging-patterns.md`
 - selected keyword-effect library entries and `effectId` values from `references/keyword-animation-effects.md`
 - data inputs: `normalized.json`, `asset-manifest.json`, video path, subtitle source
 - timeline events with frame ranges
@@ -275,6 +307,7 @@ The implementation prompt must specify:
 - 目标 Remotion 工程路径
 - composition id、时长、fps、宽高
 - `references/remotion-style-examples/` 下的已选风格参考文件
+- `references/diagnostic-hud-packaging-patterns.md` 中已选包装模式条目和 `patternType`
 - `references/keyword-animation-effects.md` 中已选关键词动效条目和 `effectId`
 - 数据输入：`normalized.json`、`asset-manifest.json`、视频路径、字幕来源
 - 带 frame 范围的时间线事件
@@ -324,10 +357,11 @@ Then build the user project:
 8. Keep the video layer visually unchanged by default: no global progress bar, background treatment, scan grid, dark scrim, backdrop image, video filter, or brightness/saturation/contrast change unless the user explicitly requests it.
 9. Set composition duration from `normalized.duration`.
 10. Use `normalized.words` for word-accurate payoff timing and `normalized.segments` for readable popup cards.
-11. Implement selected keyword effects from `references/keyword-animation-effects.md` only where the confirmed prompt calls for them.
-12. Use matched assets at their matching keyword cue only when they do not block the face, mouth, subtitles, or approved style.
-13. Extract QA keyframes and fix issues before Studio preview.
-14. Start Studio with `npm run studio`; do not render final video by default.
+11. Implement selected packaging patterns from `references/diagnostic-hud-packaging-patterns.md` only where the confirmed prompt calls for them.
+12. Implement selected keyword effects from `references/keyword-animation-effects.md` only where the confirmed prompt calls for them.
+13. Use matched assets at their matching keyword cue only when they do not block the face, mouth, subtitles, or approved style.
+14. Extract QA keyframes and fix issues before Studio preview.
+15. Start Studio with `npm run studio`; do not render final video by default.
 
 1. 新建一个干净的 Remotion 工程，或改造用户明确提供的已有 Remotion 工程。
 2. 把 `normalized.json` 加成本地数据文件或可 import 的 JSON。
@@ -339,10 +373,11 @@ Then build the user project:
 8. 默认保持视频层视觉不变：除非用户明确要求，不添加全局进度条、背景处理、扫描网格、压暗蒙层、背景图、视频滤镜或亮度/饱和度/对比度变化。
 9. 根据 `normalized.duration` 设置 composition 时长。
 10. 用 `normalized.words` 做词级卡点，用 `normalized.segments` 做可读弹出卡片。
-11. 只实现已确认 prompt 中调用的 `references/keyword-animation-effects.md` 关键词动效。
-12. 只在不挡脸、不挡嘴、不挡字幕且不破坏已确认风格时，在匹配关键词 cue 使用匹配素材。
-13. 抽取 QA 关键帧并修复问题后再打开 Studio。
-14. 用 `npm run studio` 启动 Studio；默认不要渲染最终视频。
+11. 只实现已确认 prompt 中调用的 `references/diagnostic-hud-packaging-patterns.md` 包装模式。
+12. 只实现已确认 prompt 中调用的 `references/keyword-animation-effects.md` 关键词动效。
+13. 只在不挡脸、不挡嘴、不挡字幕且不破坏已确认风格时，在匹配关键词 cue 使用匹配素材。
+14. 抽取 QA 关键帧并修复问题后再打开 Studio。
+15. 用 `npm run studio` 启动 Studio；默认不要渲染最终视频。
 
 ## Pre-Studio Keyframe QA / Studio 前关键帧 QA
 
@@ -353,6 +388,7 @@ Before opening Remotion Studio, extract still frames from the generated composit
 - first frame and last frame
 - every overlay/card/image start frame
 - every overlay/card/image landing frame
+- every evidence card and diagnostic checklist readable frame
 - every keyword effect trigger frame and visual payoff frame
 - a mid-hold frame for every readable card
 - every exit frame when an element leaves
@@ -361,6 +397,7 @@ Before opening Remotion Studio, extract still frames from the generated composit
 - 第一帧和最后一帧
 - 每个 overlay/卡片/图片的开始帧
 - 每个 overlay/卡片/图片的落位帧
+- 每个证据卡和诊断清单的可读帧
 - 每个关键词动效的触发帧和视觉落点帧
 - 每个可读卡片的中段停留帧
 - 每个元素离场帧
@@ -376,6 +413,7 @@ Inspect the frames before opening Studio:
 - no incoherent element overlap
 - no blank frame
 - no off-canvas or misplaced element
+- evidence cards are backed by real sources or clearly labeled as generated summaries
 - matched assets appear only at intended keyword cues
 - keyword effects appear only at confirmed payoff words and do not animate unrelated words
 - gesture-aware elements sit near the intended gesture target without violating safe zones
@@ -386,6 +424,7 @@ Inspect the frames before opening Studio:
 - 元素之间没有不合理重叠
 - 没有空白帧
 - 没有元素出画或错位
+- 证据卡有真实来源，或明确标成生成摘要
 - 匹配素材只在预期关键词 cue 出现
 - 关键词动效只在已确认的重点词出现，不要带动无关词
 - 手势感知元素靠近预期手势目标，且不违反安全区
@@ -423,6 +462,7 @@ Studio 打开后，询问是否调整动效方案、修改位置/时间，或进
 - If `master.srt` is missing after editing, use mapped word timings to build overlay beats.
 - If the source video path is unknown, ask the user for the prepared or final video path before building Remotion.
 - If `asset-manifest.json` has no matches, continue with generated cards and do not infer image meaning.
+- If an evidence source is missing, use a generated diagnostic card and do not fake screenshots, scores, chat records, or repository data.
 - If `$video-use` cannot provide safe-zone or gesture confidence, sample more keyframes manually and keep placements on the left, right, or upper safe areas.
 - If the user rejects the implementation prompt, revise the prompt first; do not start Remotion code generation.
 - If keyframe QA fails three times, stop and report the remaining occlusion, overlap, blank-frame, or placement issue.
@@ -432,6 +472,7 @@ Studio 打开后，询问是否调整动效方案、修改位置/时间，或进
 - 如果剪辑后缺少 `master.srt`，使用映射后的词级时间生成 overlay 节奏。
 - 如果无法确定视频路径，先让用户提供已剪好或最终视频路径，再生成 Remotion。
 - 如果 `asset-manifest.json` 没有匹配素材，继续使用生成卡片，不要推断图片含义。
+- 如果缺少证据来源，使用生成诊断卡，不要伪造截图、分数、聊天记录或仓库数据。
 - 如果 `$video-use` 无法给出安全区或手势置信度，就手动多抽关键帧，并把元素放在左侧、右侧或上半区安全位置。
 - 如果用户不认可实现 prompt，先修订 prompt；不要开始生成 Remotion 代码。
 - 如果关键帧 QA 三轮后仍失败，停止并报告剩余的遮挡、重叠、空白帧或错位问题。
